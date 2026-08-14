@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import date, datetime
-from helper import parse_timestamp
+from .helper import parse_timestamp
 
 
 @dataclass
