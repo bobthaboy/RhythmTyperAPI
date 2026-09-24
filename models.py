@@ -317,7 +317,7 @@ class Beatmap:
     favorite_count: int
     nomination_count: int
     version_history: list[VersionHistory]
-    nominations: list[Nominator]
+    nominations: list[BeatmapNominator]
     difficulty_play_counts: dict
     uploaded_at: datetime
     ranked_date: datetime | None
@@ -353,7 +353,10 @@ class Beatmap:
             favorite_count=data["favoriteCount"],
             nomination_count=data["nominationCount"],
             version_history=data["versionHistory"],
-            nominations=data["nominations"],
+            nominations=[
+                BeatmapNominator.from_dict(item)
+                for item in data.get("nominations", [])
+            ],
             difficulty_play_counts=data["difficultyPlayCounts"],
             uploaded_at=datetime.fromisoformat(data["uploadedAt"].replace("Z", "+00:00")),
             ranked_date=parse_timestamp(data.get("rankedDate")),
@@ -380,7 +383,7 @@ class BeatmapList:
 
 
 @dataclass
-class Nominator:
+class BeatmapNominator:
     nominator_id: str
     nominator_username: str
     nominated_at: datetime | None
@@ -390,7 +393,7 @@ class Nominator:
         return cls(
             nominator_id=data["nominatorId"],
             nominator_username=data["nominatorUsername"],
-            nominated_at=parse_timestamp(data["nominatedAt"]),
+            nominated_at=parse_timestamp(data.get("nominatedAt")),
         )
 
 
