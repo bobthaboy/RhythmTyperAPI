@@ -322,6 +322,7 @@ class Beatmap:
     uploaded_at: datetime
     ranked_date: datetime | None
     qualified_date: datetime | None
+    nominated_at: datetime | None
     difficulties: list[Difficulty]
 
     @classmethod
@@ -361,6 +362,7 @@ class Beatmap:
             uploaded_at=datetime.fromisoformat(data["uploadedAt"].replace("Z", "+00:00")),
             ranked_date=parse_timestamp(data.get("rankedDate")),
             qualified_date=parse_timestamp(data.get("qualifiedDate")),
+            nominated_at=data.get("nominatedAt"),
             difficulties=data["difficulties"]
         )
 
