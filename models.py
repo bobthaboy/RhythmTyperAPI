@@ -251,11 +251,13 @@ class Difficulty:
     hold_count: int
     typing_count: int
     length: float | int
+    background_url: str
+    play_count: int
 
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
-            difficulty_id=data["diffId"],
+            difficulty_id=data["id"],
             difficulty_name=data["name"],
             star_rating=data["starRating"],
             star_rating_dt=data["starRatingNC"],
@@ -268,7 +270,9 @@ class Difficulty:
             catch_count=data["catchCount"],
             hold_count=data["holdCount"],
             typing_count=data["typingCount"],
-            length=data["length"]
+            length=data["length"],
+            background_url=data["backgroundUrl"],
+            play_count=data["playCount"]
         )
 
 
@@ -301,7 +305,7 @@ class Beatmap:
     offset: int
     preview_time: int
     status: str
-    ranked: bool
+    # ranked: bool
     description: str | None
     tags: list[str]
     language: str
@@ -310,15 +314,15 @@ class Beatmap:
     has_custom_hitsounds: bool
     audio_preview_url: str
     background_image_url: str
-    background_urls: list[str]
+    # background_urls: list[str]
     rtm_url: str
     version: int
     play_count: int
     favorite_count: int
-    nomination_count: int
+    # nomination_count: int
     version_history: list[VersionHistory]
     nominations: list[BeatmapNominator]
-    difficulty_play_counts: dict
+    # difficulty_play_counts: dict
     uploaded_at: datetime
     ranked_date: datetime | None
     qualified_date: datetime | None
@@ -338,7 +342,7 @@ class Beatmap:
             offset=data["offset"],
             preview_time=data["previewTime"],
             status=data["status"],
-            ranked=data["ranked"],
+            # ranked=data["ranked"],
             description=data["description"],
             tags=data["tags"],
             language=data["language"],
@@ -347,18 +351,18 @@ class Beatmap:
             has_custom_hitsounds=data["hasCustomHitsounds"],
             audio_preview_url=data["audioPreviewUrl"],
             background_image_url=data["backgroundImageUrl"],
-            background_urls=data["backgroundUrls"],
+            # background_urls=data["backgroundUrls"],
             rtm_url=data["rtmUrl"],
             version=data["version"],
             play_count=data["playCount"],
             favorite_count=data["favoriteCount"],
-            nomination_count=data["nominationCount"],
+            # nomination_count=data["nominationCount"],
             version_history=data["versionHistory"],
             nominations=[
                 BeatmapNominator.from_dict(item)
                 for item in data.get("nominations", [])
             ],
-            difficulty_play_counts=data["difficultyPlayCounts"],
+            # difficulty_play_counts=data["difficultyPlayCounts"],
             uploaded_at=datetime.fromisoformat(data["uploadedAt"].replace("Z", "+00:00")),
             ranked_date=parse_timestamp(data.get("rankedDate")),
             qualified_date=parse_timestamp(data.get("qualifiedDate")),
