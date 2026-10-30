@@ -7,7 +7,7 @@ from .models import Grades, RankHistoryEntry, Play, RecentActivity, UserProfile,
     BestScore, UserSearchResult, Nominator, BeatmapScore
 
 
-class RhythmTyperClient():
+class RhythmTyperClient:
     BASE_URL = "https://api.rhythmtyper.net"
 
     def __init__(self, api_testing=False):
@@ -186,12 +186,12 @@ class RhythmTyperClient():
 
         return BeatmapList.from_dict(response)
 
-    def get_beatmaps(self, limit: int = 50, cursor: str | None = None, status: str = "ranked",
+    def get_beatmaps(self, limit: int = 50, cursor: str | None = None, status: str = "leaderboard",
                      sort: str | None = None,
                      explicit: bool = True, language: str = "all") -> BeatmapList:
         """
         Returns beatmaps. \n
-        Valid statuses are: "all", "ranked", "loved", "qualified", "nominated", "unranked", "custom".
+        Valid statuses are: "all", "leaderboard", "ranked", "loved", "qualified", "nominated", "unranked", "custom".
         """
         response = self.get(
             "getBeatmaps",
@@ -301,12 +301,16 @@ class RhythmTyperClient():
 
         return [BeatmapDifficulty.from_dict(item) for item in response]
 
-    def beatmap_leaderboard(self, beatmap_id: str, difficulty: str, limit: int = 50) -> list[Score]:
-        """Returns the leaderboards for a beatmap."""
+    def beatmap_leaderboard(self, beatmap_id: str, difficulty: str, limit: int = 50, sort: str = "score",
+                            mods: list[str] | None = None) -> list[Score]:
+        """Returns the leaderboards for a beatmap.
+        Valid sorts are: "score", "pp", "misses"."""
         response = self.get(
             f"v2/beatmap/{beatmap_id}/leaderboard",
             difficulty=difficulty,
-            limit=limit
+            limit=limit,
+            sort=sort,
+            mods=",".join(mods) if mods else None
         )
 
         return [Score.from_dict(item) for item in response]
